@@ -4,9 +4,9 @@ import codecs
 import os
 
 try:
-    basestring
+    str
 except:
-    basestring = str
+    str = str
 
 
 class Kian(object):
@@ -167,14 +167,14 @@ class Kian(object):
         return sum_cos
 
     def train(self):
-        print("Working on a training set size of %d" % self.size)
+        print(("Working on a training set size of %d" % self.size))
 
         while True:
             if len(self.J_cv_history) > 1 and self.J_cv_history[-1] > \
                     self.J_cv_history[-2]:
                 break
             self.lambda_para *= 1.62
-            print(self.lambda_para)
+            print((self.lambda_para))
             theta = [[]] * 2
             self.J_history = []
             for i in range(2):
@@ -239,7 +239,7 @@ class Kian(object):
         theta_2[0][1][1] -= 2 * d_theta
         dl2 = self.cost_function(theta_2, self.training_set)
         print("difference between results...")
-        print(self.D[0][1][1], (dl1 - dl2) / (2 * d_theta))
+        print((self.D[0][1][1], (dl1 - dl2) / (2 * d_theta)))
         res_the = {0: [], 1: []}
         for case in self.training_set:
             res_the[case[-1][0]].append(self.kian(self.theta, case[:-1])[0])
@@ -247,7 +247,7 @@ class Kian(object):
         for case in self.cv_set:
             res_the2[case[-1][0]].append(self.kian(self.theta, case[:-1])[0])
         print("Cost function convergence")
-        print(self.J_history[:10], self.J_history[-10:])
+        print((self.J_history[:10], self.J_history[-10:]))
         if not d_path:
             d_path = self.model.data_directory
         with codecs.open(os.path.join(d_path, 'res1.dat'), 'w', 'utf-8') as f:

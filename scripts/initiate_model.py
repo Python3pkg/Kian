@@ -1,7 +1,7 @@
 import argparse
 
 try:
-    basestring
+    str
 except NameError:
     raw_input = input
 
@@ -26,20 +26,20 @@ if args.name:
     name = args.name
 else:
     name = str(
-        raw_input('Please provide a name. No space character:')).strip()
+        input('Please provide a name. No space character:')).strip()
 if args.wiki:
     wiki = args.wiki
 else:
-    wiki = str(raw_input('Code of Wiki, e.g. enwiki, fawikivoyage:')).strip()
+    wiki = str(input('Code of Wiki, e.g. enwiki, fawikivoyage:')).strip()
 if args.prop:
     property_name = args.prop
 else:
     property_name = str(
-        raw_input('Number or id of property, e.g. P31, P17:')).strip()
+        input('Number or id of property, e.g. P31, P17:')).strip()
 if args.value:
     value = args.value
 else:
-    value = str(raw_input('value of the property. e.g. Q31, Q183:')).strip()
+    value = str(input('value of the property. e.g. Q31, Q183:')).strip()
 
 if ' ' in name:
     name = name.replace(' ', '_')
@@ -76,11 +76,11 @@ try:
     model.write_file()
 except RuntimeError:
     print('The model with the same name already exists')
-    choice = str(input('Overwrite?[Y]es, [N]ew name:'))
+    choice = str(eval(input('Overwrite?[Y]es, [N]ew name:')))
     if choice.lower().strip() == 'y':
         model.write_file(force=True)
     elif choice.lower.strip() == 'n':
-        choice = str(input('New name:'))
+        choice = str(eval(input('New name:')))
         model.name = choice.strip().replace(' ', '_')
         model.write_model()
     else:

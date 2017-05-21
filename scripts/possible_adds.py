@@ -73,13 +73,13 @@ def main():
     print('Finding possible adds')
     print(second_thrashhold)
     pros = model.wikidata_data_w | model.wikidata_data_wo
-    print(len(pros))
+    print((len(pros)))
     name = None
     a = []
     with model.wiki_data_file as f:
         for line in f:
             line = line.replace('\n', '')
-            if u'\t' not in line:
+            if '\t' not in line:
                 continue
             if name and name != line.split('\t')[0]:
                 if name in pros:
@@ -91,7 +91,7 @@ def main():
                 if res < second_thrashhold:
                     a = []
                     continue
-                print('Found something on %s, %s' % (name, res))
+                print(('Found something on %s, %s' % (name, res)))
                 item = pywikibot.ItemPage(repo, name)
                 try:
                     item.get()

@@ -5,7 +5,7 @@ import codecs
 import os
 
 try:
-    basestring
+    str
 except NameError:
     import pymysql as MySQLdb
 else:
@@ -77,7 +77,7 @@ def main():
     with model.wiki_data_file as f:
         for line in f:
             line = line.replace('\n', '')
-            if u'\t' not in line:
+            if '\t' not in line:
                 continue
             if name and name != line.split('\t')[0]:
                 features = model.label_case(a)

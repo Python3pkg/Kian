@@ -1,11 +1,11 @@
 import sys
 import MySQLdb
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 
 
 url = "http://tools.wmflabs.org/autolist/index.php?wdq=claim[" \
     "{statemnt}:{value}]&run=Run&download=1"
-res_human = urllib2.urlopen(
+res_human = urllib.request.urlopen(
     url.format(statemnt='31',
                value='5')).read().decode('utf-8')
 
@@ -21,11 +21,11 @@ def main():
     cursor.execute(select_statement)
     cases = list(cursor.fetchall())
     for case in cases:
-        print('Working on {case}'.format(case=case))
+        print(('Working on {case}'.format(case=case)))
         url = "http://tools.wmflabs.org/autolist/index.php?wdq=claim[" \
             "{statemnt}:{value}]&run=Run&download=1"
         if case[1] != 'Q5':
-            res = urllib2.urlopen(
+            res = urllib.request.urlopen(
                 url.format(statemnt=case[0][1:],
                            value=case[1][1:])).read().decode('utf-8')
         else:
@@ -39,7 +39,7 @@ def main():
         cursor.execute(select_statement)
         res2 = set([i[0] for i in cursor.fetchall()])
         intersection = res & res2
-        print(len(res), len(res2), len(intersection))
+        print((len(res), len(res2), len(intersection)))
         str_intersection = str(tuple(intersection)).replace('u\'Q', '\'Q')
         set_statement = (
             "UPDATE kian SET status = 1 "

@@ -1,12 +1,12 @@
 from .model import Model
 
 try:
-    basestring
+    str
 except NameError:
     import urllib.request as urllib2
     import pymysql as MySQLdb
 else:
-    import urllib2
+    import urllib.request, urllib.error, urllib.parse
     import MySQLdb
 
 import codecs
@@ -22,7 +22,7 @@ class ModelWithData(Model):
     def retrieve_statements_w(self):
         url = "http://tools.wmflabs.org/autolist/index.php?wdq=claim[" \
             "{statemnt}:{value}]_and_link[{wiki}]&run=Run&download=1"
-        res = urllib2.urlopen(
+        res = urllib.request.urlopen(
             url.format(statemnt=self.property_name[1:],
                        value=self.value[1:],
                        wiki=self.wiki)).read().decode('utf-8')
@@ -33,7 +33,7 @@ class ModelWithData(Model):
         url = "http://tools.wmflabs.org/autolist/index.php?wdq=claim[" \
             "{statemnt}]_and_noclaim[{statemnt}:{value}]_and_link[{wiki}]" \
             "&run=Run&download=1"
-        res = urllib2.urlopen(
+        res = urllib.request.urlopen(
             url.format(statemnt=self.property_name[1:],
                        value=self.value[1:],
                        wiki=self.wiki)).read().decode('utf-8')
@@ -43,7 +43,7 @@ class ModelWithData(Model):
             url = "http://tools.wmflabs.org/autolist/index.php?wdq={bias}" \
                   "_and_noclaim[{statemnt}:{value}]_and_link[{wiki}]" \
                   "&run=Run&download=1"
-            res = urllib2.urlopen(
+            res = urllib.request.urlopen(
                 url.format(statemnt=self.property_name[1:],
                            value=self.value[1:], bias=self.bias_unit,
                            wiki=self.wiki)).read().decode('utf-8')
@@ -119,18 +119,18 @@ class ModelWithData(Model):
             wiki_path = os.path.join(wiki_data_dir, self.wiki + '.dat')
             if not os.path.isfile(wiki_path):
                 with codecs.open(wiki_path, 'w', 'utf-8') as f:
-                    res = u''
+                    res = ''
                     for case in self.sql_query():
-                        res += u'\t'.join([i.decode('utf-8') for i in case]) \
+                        res += '\t'.join([i.decode('utf-8') for i in case]) \
                             + '\n'
                     f.write(res)
             wiki_path = os.path.join(wiki_data_dir, self.wiki + '2.dat')
             if not os.path.isfile(wiki_path):
                 with codecs.open(wiki_path, 'w', 'utf-8') as f:
-                    res = u''
+                    res = ''
                     for case in self.sql_query2():
                         sql_row_res = [str(i).decode('utf-8') for i in case]
-                        res += u'\t'.join(sql_row_res) + '\n'
+                        res += '\t'.join(sql_row_res) + '\n'
                     f.write(res)
             self.categories = {}
             with codecs.open(wiki_path, 'r', 'utf-8') as f:
@@ -145,13 +145,13 @@ class ModelWithData(Model):
                 self.data_directory, 'with_statemnts.dat')
             self.wikidata_data_w = self.retrieve_statements_w()
             with codecs.open(file_path, 'w', 'utf-8') as f:
-                f.write(u'\n'.join(self.wikidata_data_w))
+                f.write('\n'.join(self.wikidata_data_w))
             self.wikidata_data_w = set(self.wikidata_data_w)
             file_path = os.path.join(
                 self.data_directory, 'without_statemnts.dat')
             self.wikidata_data_wo = self.retrieve_statements_wo()
             with codecs.open(file_path, 'w', 'utf-8') as f:
-                f.write(u'\n'.join(self.wikidata_data_wo))
+                f.write('\n'.join(self.wikidata_data_wo))
             self.wikidata_data_wo = set(self.wikidata_data_wo)
 
     def _check(self, name, list_of_cats):
@@ -216,7 +216,7 @@ class ModelWithData(Model):
         with self.wiki_data_file as f:
             for line in f:
                 line = line.replace('\n', '')
-                if u'\t' not in line:
+                if '\t' not in line:
                     continue
                 if name and name != line.split('\t')[0]:
                     self._check(name, a)
@@ -229,7 +229,7 @@ class ModelWithData(Model):
         with self.wiki_data_file as f:
             for line in f:
                 line = line.replace('\n', '')
-                if u'\t' not in line:
+                if '\t' not in line:
                     continue
                 if name and name != line.split('\t')[0]:
                     self.build_training_set(name, a)

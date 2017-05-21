@@ -15,8 +15,8 @@ site = pywikibot.Site('wikidata', fam='wikidata')
 
 
 def main():
-    res_text = u"{| class=\"wikitable sortable\"\n!Qid!!Value<br />" \
-        u"(Wikidata)!!Value<br />(Wipedia)!!Other boring stuff"
+    res_text = "{| class=\"wikitable sortable\"\n!Qid!!Value<br />" \
+        "(Wikidata)!!Value<br />(Wipedia)!!Other boring stuff"
     args = sys.argv[1:]
     parser = argparse.ArgumentParser(description='Parse and add statements '
                                      'based on trained model')
@@ -42,7 +42,7 @@ def main():
     with model.wiki_data_file as f:
         for line in f:
             line = line.replace('\n', '')
-            if u'\t' not in line:
+            if '\t' not in line:
                 continue
             if name and name != line.split('\t')[0]:
                 features = model.label_case(a)

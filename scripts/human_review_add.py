@@ -35,15 +35,15 @@ def main():
     first_thrashhold = kian.fitness.optimum_thrashhold(cv_set, 1)[0]
     second_thrashhold = kian.fitness.optimum_thrashhold(cv_set, 0.125)[0]
     print('Finding possible adds to human review')
-    print(first_thrashhold, second_thrashhold)
+    print((first_thrashhold, second_thrashhold))
     pros = model.wikidata_data_w | model.wikidata_data_wo
-    print(len(pros))
+    print((len(pros)))
     name = None
     a = []
     with model.wiki_data_file as f:
         for line in f:
             line = line.replace('\n', '')
-            if u'\t' not in line:
+            if '\t' not in line:
                 continue
             if name and name != line.split('\t')[0]:
                 if name in pros:
@@ -53,7 +53,7 @@ def main():
                 features = model.label_case(a)
                 res = Kian.kian(model.theta, features)[0]
                 if res > first_thrashhold and res < second_thrashhold:
-                    print('%s: %s' % (name, res))
+                    print(('%s: %s' % (name, res)))
                 a = []
             name = line.split('\t')[0]
             a.append(line.split('\t')[1])
